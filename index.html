@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pilgrim's Ascent — A Journey from Darkness to Light</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <canvas id="game" width="960" height="600"></canvas>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div id="hud-top">
+      <div id="hud-level">Level 1</div>
+      <div id="hud-objective">Objective</div>
+      <div id="hud-progress"><div id="hud-progress-fill"></div></div>
+    </div>
+    <div id="hud-bottom">
+      <div id="hud-faith"><span id="faith-label">✦ Grace</span><div class="bar"><div id="faith-fill"></div></div></div>
+      <div id="hud-items"></div>
+      <div id="hud-hint">WASD / Arrows move · E interact · SHIFT run · ESC pause</div>
+    </div>
+    <div id="toast" class="hidden"></div>
+    <div id="dialogue" class="hidden">
+      <div id="dlg-name"></div>
+      <div id="dlg-text"></div>
+      <div id="dlg-prompt">E / Click ▸ continue</div>
+    </div>
+    <div id="choice" class="hidden"></div>
+  </div>
+
+  <!-- Screens -->
+  <div id="screen-menu" class="screen">
+    <div class="panel title-panel">
+      <div class="subtitle">A story of repentance · faith · redemption</div>
+      <h1>PILGRIM'S<br><span>ASCENT</span></h1>
+      <p class="tagline">From the valley of shadows to the gates of Heaven.<br>Seven trials. One transformed heart.</p>
+      <div class="menu-buttons">
+        <button id="btn-new" class="btn primary">✦ New Journey</button>
+        <button id="btn-continue" class="btn">Continue</button>
+        <button id="btn-levels" class="btn">Journey Map</button>
+        <button id="btn-settings" class="btn">Settings</button>
+        <button id="btn-help" class="btn">How to Play</button>
+      </div>
+      <div class="row" style="align-items:center">
+        <input id="entry-code" placeholder="Pilgrim code (optional)" maxlength="16"
+          style="padding:10px 12px;border-radius:10px;border:1px solid #e8c46a55;background:#0b1226;color:#f5ecd7;letter-spacing:2px;text-transform:uppercase">
+        <button id="btn-code" class="btn">Redeem ✦</button>
+      </div>
+      <p id="code-msg" class="muted"></p>
+      <p class="verse">"I am the light of the world. Whoever follows me will never walk in darkness." — John 8:12</p>
+    </div>
+  </div>
+
+  <div id="screen-levels" class="screen hidden">
+    <div class="panel">
+      <h2>Journey Map</h2>
+      <p class="muted">The path grows brighter as your heart is renewed.</p>
+      <div id="level-grid"></div>
+      <div class="row"><button id="btn-levels-back" class="btn">← Back</button></div>
+    </div>
+  </div>
+
+  <div id="screen-settings" class="screen hidden">
+    <div class="panel">
+      <h2>Settings</h2>
+      <label class="setting"><span>Music</span><input type="range" id="set-music" min="0" max="100" value="70"></label>
+      <label class="setting"><span>Sound FX</span><input type="range" id="set-sfx" min="0" max="100" value="85"></label>
+      <label class="setting"><span>Screen shake</span><input type="checkbox" id="set-shake" checked></label>
+      <label class="setting"><span>Show tutorial hints</span><input type="checkbox" id="set-hints" checked></label>
+      <div class="row">
+        <button id="btn-settings-back" class="btn">← Back</button>
+        <button id="btn-wipe" class="btn danger">Erase Progress</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-help" class="screen hidden">
+    <div class="panel">
+      <h2>How to Play</h2>
+      <ul class="help-list">
+        <li><b>Move:</b> WASD / Arrow keys · <b>Run:</b> Shift · <b>Interact:</b> E · <b>Pause:</b> Esc</li>
+        <li>Follow the <b>objective</b> at the top. Touch glowing figures to talk (E).</li>
+        <li><b>Grace</b> is your strength — hazards and enemies drain it. Rest at <b>checkpoints (altars)</b> to restore.</li>
+        <li>Reach the <b>gate of light</b> to complete each trial and learn its lesson.</li>
+        <li>Every trial teaches a real biblical truth. Rushing or choosing selfishly has consequences.</li>
+      </ul>
+      <div class="row"><button id="btn-help-back" class="btn">← Back</button></div>
+    </div>
+  </div>
+
+  <div id="screen-intro" class="screen hidden">
+    <div class="panel narrow">
+      <h2 id="intro-title"></h2>
+      <p id="intro-theme" class="muted"></p>
+      <p id="intro-text"></p>
+      <p id="intro-verse" class="verse"></p>
+      <p id="intro-goal"></p>
+      <div class="row"><button id="btn-intro-begin" class="btn primary">Enter ▸</button></div>
+    </div>
+  </div>
+
+  <div id="screen-complete" class="screen hidden">
+    <div class="panel narrow">
+      <h2 id="complete-title">Trial Overcome</h2>
+      <p id="complete-lesson"></p>
+      <p id="complete-verse" class="verse"></p>
+      <div id="complete-stats" class="muted"></div>
+      <div class="row">
+        <button id="btn-complete-next" class="btn primary">Next Trial ▸</button>
+        <button id="btn-complete-map" class="btn">Journey Map</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-pause" class="screen hidden">
+    <div class="panel narrow">
+      <h2>Paused</h2>
+      <div class="menu-buttons">
+        <button id="btn-resume" class="btn primary">Resume</button>
+        <button id="btn-restart" class="btn">Restart Trial</button>
+        <button id="btn-pause-settings" class="btn">Settings</button>
+        <button id="btn-quit" class="btn">Quit to Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-gameover" class="screen hidden">
+    <div class="panel narrow">
+      <h2>Your light grows dim…</h2>
+      <p>"But those who hope in the LORD will renew their strength." — Isaiah 40:31</p>
+      <p class="muted">Grace is never exhausted. Rise and try again — repentance is always one step away.</p>
+      <div class="row">
+        <button id="btn-retry" class="btn primary">Rise Again (Respawn)</button>
+        <button id="btn-go-map" class="btn">Journey Map</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-heaven" class="screen hidden">
+    <div class="panel narrow heaven-panel">
+      <h1 class="heaven-title">HEAVEN</h1>
+      <p id="heaven-text"></p>
+      <p class="verse">"He will wipe every tear from their eyes… for the old order of things has passed away." — Revelation 21:4</p>
+      <p class="muted">Thank you for playing <b>Pilgrim's Ascent</b>. You did not earn Heaven — grace carried you. ✦</p>
+      <div class="row">
+        <button id="btn-heaven-replay" class="btn primary">Walk Again</button>
+        <button id="btn-heaven-menu" class="btn">Menu</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
