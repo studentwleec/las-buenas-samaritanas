@@ -4,16 +4,12 @@ A complete story-driven 2D adventure game with biblical themes. Zero dependencie
 
 ## Run
 
-Use any static server (ES modules require http, not file://):
+Just **double-click `index.html`** — the game uses plain scripts (no modules, no build step),
+so it plays straight from the file system. You can also serve it if you like:
 
 ```powershell
-# PowerShell — pick one
 npx serve .
-py -m http.server 8000
-php -S localhost:8000
 ```
-
-Then open http://localhost:8000
 
 ## Game
 

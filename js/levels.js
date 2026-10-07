@@ -1,4 +1,4 @@
-// Level definitions: 7 trials + Heaven finale. Each has unique mechanics.
+// Level definitions: 7 trials + Heaven finale. Classic script — exposes globals `LEVELS`, `HEAVEN_TEXT`.
 // Map coordinates: world 1600x1000. Walls = {x,y,w,h}. Everything else similar.
 function border(W = 1600, H = 1000, t = 30) {
   return [
@@ -8,7 +8,7 @@ function border(W = 1600, H = 1000, t = 30) {
 }
 const A = (x, y, lines, name = 'Stranger') => ({ x, y, name, lines });
 
-export const LEVELS = [
+const LEVELS = [
   {
     id: 0, name: 'I · Valley of Sloth', sin: 'Sloth', icon: '🌫️',
     verse: '"Whatever you do, work at it with all your heart." — Colossians 3:23',
@@ -152,7 +152,7 @@ export const LEVELS = [
   }
 ];
 
-export const HEAVEN_TEXT = [
+const HEAVEN_TEXT = [
   'Every beacon relit. Every coin refused. Every insult forgiven.',
   'The grey falls away like a dream at dawn…',
   'You do not climb into Heaven — you are welcomed. Not by wages, but by grace through faith (Ephesians 2:8-9).',

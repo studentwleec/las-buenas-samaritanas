@@ -1,8 +1,5 @@
 // App wiring: screens, HUD, dialogue, progression, Heaven finale.
-import { Game } from './engine.js';
-import { LEVELS, HEAVEN_TEXT } from './levels.js';
-import { Save } from './save.js';
-import { SFX, startMusic, stopMusic, setVolumes } from './audio.js';
+// Classic script — uses globals from save.js / audio.js / levels.js / engine.js (no imports, file:// safe).
 
 const $ = id => document.getElementById(id);
 Save.load();

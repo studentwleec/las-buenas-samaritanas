@@ -1,8 +1,8 @@
-// Central save / settings store (localStorage). No dependencies.
+// Central save / settings store (localStorage). Classic script (file:// compatible) — exposes global `Save`.
 const KEY = 'pilgrims-ascent-v1';
 const defaults = () => ({ unlocked: 0, done: [], settings: { music: 70, sfx: 85, shake: true, hints: true } });
 
-export const Save = {
+const Save = {
   data: defaults(),
   load() {
     try {

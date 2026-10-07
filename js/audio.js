@@ -1,4 +1,5 @@
 // Procedural audio: ambient music + synthesized SFX via WebAudio. No assets needed.
+// Classic script (file:// compatible) — exposes globals `SFX`, `startMusic`, `stopMusic`, `setVolumes`.
 let ctx = null, musicGain = null, sfxGain = null, musicTimer = null, currentMood = 0;
 
 function ensure() {
@@ -7,7 +8,7 @@ function ensure() {
   musicGain = ctx.createGain(); musicGain.connect(ctx.destination);
   sfxGain = ctx.createGain(); sfxGain.connect(ctx.destination);
 }
-export function setVolumes(m, s) {
+function setVolumes(m, s) {
   ensure();
   musicGain.gain.value = (m / 100) * 0.35;
   sfxGain.gain.value = (s / 100) * 0.5;
@@ -21,7 +22,7 @@ function tone(freq, dur, type = 'sine', vol = 0.3, slide = 0) {
   g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
   o.connect(g); g.connect(sfxGain); o.start(); o.stop(ctx.currentTime + dur);
 }
-export const SFX = {
+const SFX = {
   unlock() { try { ensure(); ctx.resume(); } catch {} },
   step() { tone(180 + Math.random() * 60, 0.07, 'triangle', 0.08); },
   pickup() { tone(660, 0.15, 'sine', 0.25, 330); },
@@ -35,7 +36,7 @@ export const SFX = {
 // Generative ambient: darker (minor, slow) -> brighter (major, warm) by mood 0..7
 const minor = [110, 130.8, 146.8, 164.8, 196, 220];
 const major = [261.6, 293.7, 329.6, 392, 440, 523.3, 587.3];
-export function startMusic(mood) {
+function startMusic(mood) {
   ensure(); ctx.resume(); currentMood = mood;
   stopMusic(false);
   const bright = mood / 7;
@@ -52,7 +53,7 @@ export function startMusic(mood) {
     o.connect(g); g.connect(musicGain); o.start(); o.stop(ctx.currentTime + dur + 0.1);
   }, 1400);
 }
-export function stopMusic(close = true) {
+function stopMusic(close = true) {
   if (musicTimer) clearInterval(musicTimer);
   musicTimer = null;
   if (close && ctx) { /* keep ctx */ }

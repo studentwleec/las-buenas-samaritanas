@@ -1,9 +1,9 @@
-// Core engine: player, camera, collisions, entities, rendering. Framework-free canvas.
-import { SFX } from './audio.js';
+// Core engine: player, camera, collisions, entities, rendering. Classic script — globals `rectsOverlap`, `Game`.
+// (Uses global `SFX` from audio.js; no imports so the game runs from file://.)
 
-export function rectsOverlap(a, b) { return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y; }
+function rectsOverlap(a, b) { return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y; }
 
-export class Game {
+class Game {
   constructor(canvas, hooks) {
     this.cv = canvas; this.ctx = canvas.getContext('2d');
     this.hooks = hooks; // {onObjective, onPickup, toast, dialogue, choice, complete, gameover, hud}
